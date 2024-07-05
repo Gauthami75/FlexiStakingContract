@@ -39,7 +39,7 @@ contract FixedTermFilecoinStaking is Initializable, OwnableUpgradeable, Reentran
         emit InterestRateChanged(period, newRate, block.timestamp);
     }
 
-    function stake(StakePeriod period) external payable {
+    function stake(StakePeriod period) external payable nonReentrant{
         uint256 amount = msg.value;
         require(amount > 0, "Cannot stake 0");
         require ((msg.sender).balance >= msg.value,"staker doesn't have enough coins");
@@ -176,7 +176,7 @@ contract FixedTermFilecoinStaking is Initializable, OwnableUpgradeable, Reentran
         payable(msg.sender).transfer(amount);
     }
 
-    fallback() external payable {}
+    fallback() external payable nonReentrant{}
 
     receive() external payable nonReentrant{}
 }
