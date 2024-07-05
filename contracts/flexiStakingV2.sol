@@ -25,7 +25,7 @@ contract FilecoinStakingContractV2 is Initializable, OwnableUpgradeable, Reentra
     event Debug(string message, uint256 value);
     event DebugString(string message);
 
-    function initialize() external initializer {
+    function initialize() external initializer nonReentrant(){
         __Ownable_init(msg.sender);
         __ReentrancyGuard_init();
         interestRateHistory.push(InterestRateChange({
