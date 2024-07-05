@@ -25,7 +25,7 @@ contract FilecoinStakingContractV2 is Initializable, OwnableUpgradeable, Reentra
     event Debug(string message, uint256 value);
     event DebugString(string message);
 
-    function initialize() external initializer nonReentrant(){
+    function initialize() external initializer nonReentrant{
         __Ownable_init(msg.sender);
         __ReentrancyGuard_init();
         interestRateHistory.push(InterestRateChange({
@@ -68,8 +68,9 @@ contract FilecoinStakingContractV2 is Initializable, OwnableUpgradeable, Reentra
     require(address(this).balance >= amount, "Insufficient fund");
 
     uint256 totalStaked = 0;
-    for (uint256 i = 0; i < userStakes[msg.sender].length; i++) {
-        totalStaked += userStakes[msg.sender][i].amount;
+    StakeInfo[] storage stakes = userStakes[msg.sender]; 
+    for (uint256 i = 0; i < stakes.length; i++) {
+        totalStaked += stakes[i].amount;
     }
     emit Debug("Total Staked", totalStaked);
 
@@ -79,8 +80,8 @@ contract FilecoinStakingContractV2 is Initializable, OwnableUpgradeable, Reentra
     uint256 totalInterest = 0;
     uint256 totalPrincipal = 0;
 
-    for (uint256 i = 0; i < userStakes[msg.sender].length && remainingAmount > 0; i++) {
-        StakeInfo storage stakeInfo = userStakes[msg.sender][i];
+    for (uint256 i = 0; i < stakes.length && remainingAmount > 0; i++) {
+        StakeInfo storage stakeInfo = stakes[i];
         uint256 stakeAmount = stakeInfo.amount;
 
         emit Debug("Processing Stake Index", i);
@@ -141,8 +142,9 @@ contract FilecoinStakingContractV2 is Initializable, OwnableUpgradeable, Reentra
     uint256 totalInterest = 0;
     uint256 lastTime = stakeInfo.startTime;
     uint256 amount = stakeInfo.amount;
+    uint256 historyLength = interestRateHistory.length;  // Cache the length
 
-    for (uint256 i = 0; i < interestRateHistory.length; i++) {
+    for (uint256 i = 0; i < historyLength; i++) {
         InterestRateChange memory rateChange = interestRateHistory[i];
         if (rateChange.startTime > lastTime) {
             uint256 timePeriod = rateChange.startTime - lastTime;
@@ -153,7 +155,7 @@ contract FilecoinStakingContractV2 is Initializable, OwnableUpgradeable, Reentra
 
     if (lastTime < block.timestamp) {
         uint256 timePeriod = block.timestamp - lastTime;
-        totalInterest += (amount * interestRateHistory[interestRateHistory.length - 1].rate * timePeriod) / (365 * 24 * 60 * 60 * (10**18));
+        totalInterest += (amount * interestRateHistory[historyLength  - 1].rate * timePeriod) / (365 * 24 * 60 * 60 * (10**18));
     }
 
     return totalInterest;
@@ -186,5 +188,5 @@ contract FilecoinStakingContractV2 is Initializable, OwnableUpgradeable, Reentra
 
     fallback() external payable {}
 
-    receive() external payable {}
+    receive() external payable nonReentrant{}
 }

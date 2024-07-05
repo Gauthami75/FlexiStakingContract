@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.18;
+pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
 
-contract FixedTermFilecoinStakingP is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeable {
+contract FixedTermFilecoinStaking is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeable {
     enum StakePeriod { ONE_DAYS, TWO_DAYS, THREE_DAYS, FOUR_DAYS }
 
     struct StakeInfo {
@@ -22,18 +22,19 @@ contract FixedTermFilecoinStakingP is Initializable, OwnableUpgradeable, Reentra
     event Unstaked(address indexed user, uint256 amount, uint256 interest, uint256 timestamp);
     event InterestRateChanged(StakePeriod period, uint256 newRate, uint256 timestamp);
 
-    function initialize() external initializer nonReentrant{
+    function initialize() public initializer nonReentrant{
         __Ownable_init(msg.sender);
         __ReentrancyGuard_init();
 
         // Initialize default plans with default interest rates
+       // Initialize default plans with default interest rates
         interestRates[StakePeriod.ONE_DAYS] = 10000000000000000; // 1%
         interestRates[StakePeriod.TWO_DAYS] = 20000000000000000;   // 2%
         interestRates[StakePeriod.THREE_DAYS] = 30000000000000000; // 3%
         interestRates[StakePeriod.FOUR_DAYS] = 40000000000000000; // 4%
     }
 
-    function setInterestRate(StakePeriod period, uint256 newRate) external onlyOwner {
+    function setInterestRate(StakePeriod period, uint256 newRate) external onlyOwner nonReentrant{
         interestRates[period] = newRate;
         emit InterestRateChanged(period, newRate, block.timestamp);
     }
@@ -66,11 +67,12 @@ contract FixedTermFilecoinStakingP is Initializable, OwnableUpgradeable, Reentra
     uint256 totalPrincipal = 0;
     uint256 totalInterest = 0;
     uint256 remainingAmount = amount;
-
+    
+    StakeInfo[] storage stakes = userStakes[msg.sender]; 
     // Calculate the total amount staked in the specified period
     uint256 totalStakedInPeriod = 0;
-    for (uint256 i = 0; i < userStakes[msg.sender].length; i++) {
-        StakeInfo storage stakeInfo = userStakes[msg.sender][i];
+    for (uint256 i = 0; i < stakes.length; i++) {
+        StakeInfo storage stakeInfo = stakes[i];
         if (stakeInfo.period == period && stakeInfo.amount > 0) {
             totalStakedInPeriod += stakeInfo.amount;
         }
@@ -79,8 +81,8 @@ contract FixedTermFilecoinStakingP is Initializable, OwnableUpgradeable, Reentra
     // Check if the user has enough staked amount in the specified period
     require(totalStakedInPeriod >= amount, "Insufficient staked amount in the specified period");
 
-    for (uint256 i = 0; i < userStakes[msg.sender].length && remainingAmount > 0; i++) {
-        StakeInfo storage stakeInfo = userStakes[msg.sender][i];
+    for (uint256 i = 0; i < stakes.length && remainingAmount > 0; i++) {
+        StakeInfo storage stakeInfo = stakes[i];
         if (stakeInfo.period == period && stakeInfo.amount > 0) {
             uint256 endTime = stakeInfo.startTime + getPeriodDuration(stakeInfo.period);
             require(block.timestamp >= endTime, "Stake period not yet completed");
@@ -176,5 +178,5 @@ contract FixedTermFilecoinStakingP is Initializable, OwnableUpgradeable, Reentra
 
     fallback() external payable {}
 
-    receive() external payable {}
+    receive() external payable nonReentrant{}
 }
