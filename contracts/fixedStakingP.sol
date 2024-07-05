@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.18;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
@@ -22,7 +22,7 @@ contract FixedTermFilecoinStaking is Initializable, OwnableUpgradeable, Reentran
     event Unstaked(address indexed user, uint256 amount, uint256 interest, uint256 timestamp);
     event InterestRateChanged(StakePeriod period, uint256 newRate, uint256 timestamp);
 
-    function initialize() public initializer nonReentrant{
+    function initialize() external initializer nonReentrant{
         __Ownable_init(msg.sender);
         __ReentrancyGuard_init();
 
