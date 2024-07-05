@@ -5,6 +5,16 @@
       "address": "0x1777c208402869B69a25fb1CBe3EEFB74735Fd25",
       "txHash": "0x430a2a1a4b0bff42df8a7850c7d4d8941dfd6d06fbdddea5a0af06b85329b12b",
       "kind": "transparent"
+    },
+    {
+      "address": "0xe7f781361F881A9f610Bf4E42BD61f3de3Ef5A4a",
+      "txHash": "0x7f57199165065dedf59bf240a93ac629fe838bf511344d32699b207e751b9636",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xC2ceA601D004a9a1f93F4aa0f584849D86d29CfF",
+      "txHash": "0x214a67fc165d1978e9fb235b4c23b40079b41309bd925e3946bb7a4acae5fef7",
+      "kind": "transparent"
     }
   ],
   "impls": {
@@ -18,7 +28,7 @@
             "label": "interestRateHistory",
             "offset": 0,
             "slot": "0",
-            "type": "t_array(t_struct(InterestRateChange)639_storage)dyn_storage",
+            "type": "t_array(t_struct(InterestRateChange)1440_storage)dyn_storage",
             "contract": "FilecoinStakingContract",
             "src": "contracts\\flexiStaking.sol:20"
           },
@@ -26,7 +36,7 @@
             "label": "userStakes",
             "offset": 0,
             "slot": "1",
-            "type": "t_mapping(t_address,t_array(t_struct(StakeInfo)646_storage)dyn_storage)",
+            "type": "t_mapping(t_address,t_array(t_struct(StakeInfo)1447_storage)dyn_storage)",
             "contract": "FilecoinStakingContract",
             "src": "contracts\\flexiStaking.sol:21"
           }
@@ -90,19 +100,19 @@
             "label": "uint64",
             "numberOfBytes": "8"
           },
-          "t_array(t_struct(InterestRateChange)639_storage)dyn_storage": {
+          "t_array(t_struct(InterestRateChange)1440_storage)dyn_storage": {
             "label": "struct FilecoinStakingContract.InterestRateChange[]",
             "numberOfBytes": "32"
           },
-          "t_array(t_struct(StakeInfo)646_storage)dyn_storage": {
+          "t_array(t_struct(StakeInfo)1447_storage)dyn_storage": {
             "label": "struct FilecoinStakingContract.StakeInfo[]",
             "numberOfBytes": "32"
           },
-          "t_mapping(t_address,t_array(t_struct(StakeInfo)646_storage)dyn_storage)": {
+          "t_mapping(t_address,t_array(t_struct(StakeInfo)1447_storage)dyn_storage)": {
             "label": "mapping(address => struct FilecoinStakingContract.StakeInfo[])",
             "numberOfBytes": "32"
           },
-          "t_struct(InterestRateChange)639_storage": {
+          "t_struct(InterestRateChange)1440_storage": {
             "label": "struct FilecoinStakingContract.InterestRateChange",
             "members": [
               {
@@ -120,7 +130,7 @@
             ],
             "numberOfBytes": "64"
           },
-          "t_struct(StakeInfo)646_storage": {
+          "t_struct(StakeInfo)1447_storage": {
             "label": "struct FilecoinStakingContract.StakeInfo",
             "members": [
               {
@@ -143,6 +153,716 @@
               }
             ],
             "numberOfBytes": "96"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.ReentrancyGuard": [
+            {
+              "contract": "ReentrancyGuardUpgradeable",
+              "label": "_status",
+              "type": "t_uint256",
+              "src": "@openzeppelin\\contracts-upgradeable\\utils\\ReentrancyGuardUpgradeable.sol:40",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Ownable": [
+            {
+              "contract": "OwnableUpgradeable",
+              "label": "_owner",
+              "type": "t_address",
+              "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:24",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    },
+    "cd6568b3d10a2863fb6a1aee5f67910400087de78e0857d5037c2e729b816ec4": {
+      "address": "0x9957F35AB37751cd87d7ddDcdc392734212B2D48",
+      "txHash": "0x1b4d7ddc8a1fcad5f29a92f65beacde5cfb7c66c974022ade05008e704466820",
+      "layout": {
+        "solcVersion": "0.8.20",
+        "storage": [
+          {
+            "label": "interestRates",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_mapping(t_enum(StakePeriod)639,t_uint256)",
+            "contract": "FixedTermFilecoinStaking",
+            "src": "contracts\\fixedStaking.sol:18"
+          },
+          {
+            "label": "userStakes",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_mapping(t_address,t_array(t_struct(StakeInfo)649_storage)dyn_storage)",
+            "contract": "FixedTermFilecoinStaking",
+            "src": "contracts\\fixedStaking.sol:19"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_struct(InitializableStorage)65_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(OwnableStorage)14_storage": {
+            "label": "struct OwnableUpgradeable.OwnableStorage",
+            "members": [
+              {
+                "label": "_owner",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(ReentrancyGuardStorage)140_storage": {
+            "label": "struct ReentrancyGuardUpgradeable.ReentrancyGuardStorage",
+            "members": [
+              {
+                "label": "_status",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_array(t_struct(StakeInfo)649_storage)dyn_storage": {
+            "label": "struct FixedTermFilecoinStaking.StakeInfo[]",
+            "numberOfBytes": "32"
+          },
+          "t_enum(StakePeriod)639": {
+            "label": "enum FixedTermFilecoinStaking.StakePeriod",
+            "members": [
+              "THREE_MONTHS",
+              "SIX_MONTHS",
+              "TWELVE_MONTHS",
+              "EIGHTEEN_MONTHS"
+            ],
+            "numberOfBytes": "1"
+          },
+          "t_mapping(t_address,t_array(t_struct(StakeInfo)649_storage)dyn_storage)": {
+            "label": "mapping(address => struct FixedTermFilecoinStaking.StakeInfo[])",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_enum(StakePeriod)639,t_uint256)": {
+            "label": "mapping(enum FixedTermFilecoinStaking.StakePeriod => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_struct(StakeInfo)649_storage": {
+            "label": "struct FixedTermFilecoinStaking.StakeInfo",
+            "members": [
+              {
+                "label": "amount",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "startTime",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "interestAccrued",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "2"
+              },
+              {
+                "label": "period",
+                "type": "t_enum(StakePeriod)639",
+                "offset": 0,
+                "slot": "3"
+              }
+            ],
+            "numberOfBytes": "128"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.ReentrancyGuard": [
+            {
+              "contract": "ReentrancyGuardUpgradeable",
+              "label": "_status",
+              "type": "t_uint256",
+              "src": "@openzeppelin\\contracts-upgradeable\\utils\\ReentrancyGuardUpgradeable.sol:40",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Ownable": [
+            {
+              "contract": "OwnableUpgradeable",
+              "label": "_owner",
+              "type": "t_address",
+              "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:24",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    },
+    "ffc9a6e27c9aa45e6428a2f180540d420682f03134704a6cc410633994fba553": {
+      "address": "0x9c0f86d106aA28a16505652E7904fbA1c71Bb9eD",
+      "txHash": "0x4a2b8fa19d93f50f146cb63e3c959d52858833e2dcb61a2d094ca2bac1e860d2",
+      "layout": {
+        "solcVersion": "0.8.20",
+        "storage": [
+          {
+            "label": "interestRateHistory",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_array(t_struct(InterestRateChange)639_storage)dyn_storage",
+            "contract": "FilecoinStakingContractV2",
+            "src": "contracts\\flexiStakingV2.sol:20"
+          },
+          {
+            "label": "userStakes",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_mapping(t_address,t_array(t_struct(StakeInfo)646_storage)dyn_storage)",
+            "contract": "FilecoinStakingContractV2",
+            "src": "contracts\\flexiStakingV2.sol:21"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_struct(InitializableStorage)65_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(OwnableStorage)14_storage": {
+            "label": "struct OwnableUpgradeable.OwnableStorage",
+            "members": [
+              {
+                "label": "_owner",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(ReentrancyGuardStorage)140_storage": {
+            "label": "struct ReentrancyGuardUpgradeable.ReentrancyGuardStorage",
+            "members": [
+              {
+                "label": "_status",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_array(t_struct(InterestRateChange)639_storage)dyn_storage": {
+            "label": "struct FilecoinStakingContractV2.InterestRateChange[]",
+            "numberOfBytes": "32"
+          },
+          "t_array(t_struct(StakeInfo)646_storage)dyn_storage": {
+            "label": "struct FilecoinStakingContractV2.StakeInfo[]",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_array(t_struct(StakeInfo)646_storage)dyn_storage)": {
+            "label": "mapping(address => struct FilecoinStakingContractV2.StakeInfo[])",
+            "numberOfBytes": "32"
+          },
+          "t_struct(InterestRateChange)639_storage": {
+            "label": "struct FilecoinStakingContractV2.InterestRateChange",
+            "members": [
+              {
+                "label": "rate",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "startTime",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_struct(StakeInfo)646_storage": {
+            "label": "struct FilecoinStakingContractV2.StakeInfo",
+            "members": [
+              {
+                "label": "amount",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "startTime",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "interestAccrued",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "2"
+              }
+            ],
+            "numberOfBytes": "96"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.ReentrancyGuard": [
+            {
+              "contract": "ReentrancyGuardUpgradeable",
+              "label": "_status",
+              "type": "t_uint256",
+              "src": "@openzeppelin\\contracts-upgradeable\\utils\\ReentrancyGuardUpgradeable.sol:40",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Ownable": [
+            {
+              "contract": "OwnableUpgradeable",
+              "label": "_owner",
+              "type": "t_address",
+              "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:24",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    },
+    "ab276a5071f728a096f95f65d2322e2f64a752c98a64f045c795ae58bcd9757b": {
+      "address": "0x87fc7e6699dAa2c12ac6Eb96a7bbeAB851532fC3",
+      "txHash": "0xba520a17c7ba8df69f47e8973c36dd5bc8f33c48ea3647e001aa6679c1082d9b",
+      "layout": {
+        "solcVersion": "0.8.20",
+        "storage": [
+          {
+            "label": "interestRates",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_mapping(t_enum(StakePeriod)639,t_uint256)",
+            "contract": "FixedTermFilecoinStakingP",
+            "src": "contracts\\fixedStakingP.sol:18"
+          },
+          {
+            "label": "userStakes",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_mapping(t_address,t_array(t_struct(StakeInfo)649_storage)dyn_storage)",
+            "contract": "FixedTermFilecoinStakingP",
+            "src": "contracts\\fixedStakingP.sol:19"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_struct(InitializableStorage)65_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(OwnableStorage)14_storage": {
+            "label": "struct OwnableUpgradeable.OwnableStorage",
+            "members": [
+              {
+                "label": "_owner",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(ReentrancyGuardStorage)140_storage": {
+            "label": "struct ReentrancyGuardUpgradeable.ReentrancyGuardStorage",
+            "members": [
+              {
+                "label": "_status",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_array(t_struct(StakeInfo)649_storage)dyn_storage": {
+            "label": "struct FixedTermFilecoinStakingP.StakeInfo[]",
+            "numberOfBytes": "32"
+          },
+          "t_enum(StakePeriod)639": {
+            "label": "enum FixedTermFilecoinStakingP.StakePeriod",
+            "members": [
+              "ONE_DAYS",
+              "TWO_DAYS",
+              "THREE_DAYS",
+              "FOUR_DAYS"
+            ],
+            "numberOfBytes": "1"
+          },
+          "t_mapping(t_address,t_array(t_struct(StakeInfo)649_storage)dyn_storage)": {
+            "label": "mapping(address => struct FixedTermFilecoinStakingP.StakeInfo[])",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_enum(StakePeriod)639,t_uint256)": {
+            "label": "mapping(enum FixedTermFilecoinStakingP.StakePeriod => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_struct(StakeInfo)649_storage": {
+            "label": "struct FixedTermFilecoinStakingP.StakeInfo",
+            "members": [
+              {
+                "label": "amount",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "startTime",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "interestAccrued",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "2"
+              },
+              {
+                "label": "period",
+                "type": "t_enum(StakePeriod)639",
+                "offset": 0,
+                "slot": "3"
+              }
+            ],
+            "numberOfBytes": "128"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.ReentrancyGuard": [
+            {
+              "contract": "ReentrancyGuardUpgradeable",
+              "label": "_status",
+              "type": "t_uint256",
+              "src": "@openzeppelin\\contracts-upgradeable\\utils\\ReentrancyGuardUpgradeable.sol:40",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Ownable": [
+            {
+              "contract": "OwnableUpgradeable",
+              "label": "_owner",
+              "type": "t_address",
+              "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:24",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    },
+    "d2e5830f0ef907d8ac0168607da51b41278ed057527e2abc6630c36bdae4f76f": {
+      "address": "0xbDdA3c7436fCa95b1D9Ee48A5C249e723A8dd4a1",
+      "txHash": "0x602bbbf6f85f118f8486980243731aed9095ee20e8b71a562c1ec50546e5a3f5",
+      "layout": {
+        "solcVersion": "0.8.20",
+        "storage": [
+          {
+            "label": "interestRates",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_mapping(t_enum(StakePeriod)639,t_uint256)",
+            "contract": "FixedTermFilecoinStakingV2",
+            "src": "contracts\\fixedStakingV2.sol:18"
+          },
+          {
+            "label": "userStakes",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_mapping(t_address,t_array(t_struct(StakeInfo)649_storage)dyn_storage)",
+            "contract": "FixedTermFilecoinStakingV2",
+            "src": "contracts\\fixedStakingV2.sol:19"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_struct(InitializableStorage)65_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(OwnableStorage)14_storage": {
+            "label": "struct OwnableUpgradeable.OwnableStorage",
+            "members": [
+              {
+                "label": "_owner",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(ReentrancyGuardStorage)140_storage": {
+            "label": "struct ReentrancyGuardUpgradeable.ReentrancyGuardStorage",
+            "members": [
+              {
+                "label": "_status",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_array(t_struct(StakeInfo)649_storage)dyn_storage": {
+            "label": "struct FixedTermFilecoinStakingV2.StakeInfo[]",
+            "numberOfBytes": "32"
+          },
+          "t_enum(StakePeriod)639": {
+            "label": "enum FixedTermFilecoinStakingV2.StakePeriod",
+            "members": [
+              "THREE_MONTHS",
+              "SIX_MONTHS",
+              "TWELVE_MONTHS",
+              "EIGHTEEN_MONTHS"
+            ],
+            "numberOfBytes": "1"
+          },
+          "t_mapping(t_address,t_array(t_struct(StakeInfo)649_storage)dyn_storage)": {
+            "label": "mapping(address => struct FixedTermFilecoinStakingV2.StakeInfo[])",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_enum(StakePeriod)639,t_uint256)": {
+            "label": "mapping(enum FixedTermFilecoinStakingV2.StakePeriod => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_struct(StakeInfo)649_storage": {
+            "label": "struct FixedTermFilecoinStakingV2.StakeInfo",
+            "members": [
+              {
+                "label": "amount",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "startTime",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "interestAccrued",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "2"
+              },
+              {
+                "label": "period",
+                "type": "t_enum(StakePeriod)639",
+                "offset": 0,
+                "slot": "3"
+              }
+            ],
+            "numberOfBytes": "128"
           }
         },
         "namespaces": {

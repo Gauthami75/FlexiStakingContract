@@ -6,8 +6,8 @@ async function main() {
 
     const stakingContract = await upgrades.deployProxy(FilecoinStakingContract, [], {
         initializer: 'initialize',
-        timeout: 600000, // 10 minutes timeout
-        pollingInterval: 15000 // 15 seconds polling interval
+        timeout: 600000, 
+        pollingInterval: 15000 
       });
     await stakingContract.waitForDeployment();
 
