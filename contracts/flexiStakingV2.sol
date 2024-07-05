@@ -41,7 +41,7 @@ contract FilecoinStakingContractV2 is Initializable, OwnableUpgradeable, Reentra
         }));
     }
 
-    function stake() external payable {
+    function stake() external payable nonReentrant{
         uint256 amount = msg.value;
         require(amount > 0, "Cannot stake 0");
         emit Debug("Before Stake ContractBalance", address(this).balance);
@@ -186,7 +186,7 @@ contract FilecoinStakingContractV2 is Initializable, OwnableUpgradeable, Reentra
         payable(msg.sender).transfer(amount);
     }
 
-    fallback() external payable {}
+    fallback() external payable nonReentrant{}
 
     receive() external payable nonReentrant{}
 }
