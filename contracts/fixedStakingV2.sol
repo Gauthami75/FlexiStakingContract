@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.18;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
@@ -22,7 +22,7 @@ contract FixedTermFilecoinStakingV2 is Initializable, OwnableUpgradeable, Reentr
     event Unstaked(address indexed user, uint256 amount, uint256 interest, uint256 timestamp);
     event InterestRateChanged(StakePeriod period, uint256 newRate, uint256 timestamp);
 
-    function initialize() public initializer {
+    function initialize() external initializer nonReentrant{
         __Ownable_init(msg.sender);
         __ReentrancyGuard_init();
 
@@ -110,8 +110,9 @@ contract FixedTermFilecoinStakingV2 is Initializable, OwnableUpgradeable, Reentr
     require(remainingAmount == 0, "Unable to unstake the specified amount");
     uint256 totalAmount = totalPrincipal + totalInterest;
     require(address(this).balance >= totalAmount, "Contract does not have enough balance");
-    payable(msg.sender).transfer(totalAmount);
     emit Unstaked(msg.sender, totalPrincipal, totalInterest, block.timestamp);
+    payable(msg.sender).transfer(totalAmount);
+    
 }
 
     function calculateInterest(StakeInfo memory stakeInfo) internal view returns (uint256) {
@@ -158,11 +159,11 @@ contract FixedTermFilecoinStakingV2 is Initializable, OwnableUpgradeable, Reentr
     }
 }
 
-    function getContractBalance() public view returns (uint256) {
+    function getContractBalance() external view returns (uint256) {
         return address(this).balance;
     }
 
-    function getCurrentRate(StakePeriod period) public view returns (uint256) {
+    function getCurrentRate(StakePeriod period) external view returns (uint256) {
         return interestRates[period];
     }
 
