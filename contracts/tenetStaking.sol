@@ -5,7 +5,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
 
-contract FilecoinStakingContractV2 is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeable {
+contract StakingContract is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeable {
     struct InterestRateChange {
         uint256 rate;
         uint256 startTime;
@@ -17,23 +17,15 @@ contract FilecoinStakingContractV2 is Initializable, OwnableUpgradeable, Reentra
         uint256 interestAccrued;
     }
 
-    struct UnstakeRequest {
-        uint256 amount;
-        uint256 requestTime;
-        bool processed;
-    }
-
     InterestRateChange[] public interestRateHistory;
     mapping(address => StakeInfo[]) public userStakes;
-    mapping(address => UnstakeRequest[]) public unstakeRequests;
-
-    uint256 public COOLING_PERIOD;
 
     event Staked(address indexed user, uint256 amount, uint256 timestamp);
     event Unstaked(address indexed user, uint256 amount, uint256 interest, uint256 timestamp);
-    event UnstakeRequested(address indexed user, uint256 amount, uint256 requestId, uint256 timestamp);
-    event CoolingPeriodChanged(uint256 newCoolingPeriod, uint256 timestamp);
-    
+    event Delegated(address indexed user, uint256 amount, uint256 timestamp);
+    event Debug(string message, uint256 value);
+    event DebugString(string message);
+
     function initialize() external initializer nonReentrant {
         __Ownable_init(msg.sender);
         __ReentrancyGuard_init();
@@ -41,12 +33,6 @@ contract FilecoinStakingContractV2 is Initializable, OwnableUpgradeable, Reentra
             rate: 50000000000000000, // initial interest rate
             startTime: block.timestamp
         }));
-    }
-
-    function initializeV2(uint256 _coolingPeriod) public onlyOwner {
-        require(COOLING_PERIOD == 0, "Already initialized");
-        COOLING_PERIOD = _coolingPeriod;
-        emit CoolingPeriodChanged(COOLING_PERIOD, block.timestamp);
     }
 
     function setInterestRate(uint256 newRate) external onlyOwner nonReentrant {
@@ -59,7 +45,8 @@ contract FilecoinStakingContractV2 is Initializable, OwnableUpgradeable, Reentra
     function stake() external payable nonReentrant {
         uint256 amount = msg.value;
         require(amount > 0, "Cannot stake 0");
-
+        emit Debug("Before Stake ContractBalance", address(this).balance);
+        emit Debug("After Stake ContractBalance", address(this).balance);
         for (uint256 i = 0; i < userStakes[msg.sender].length; i++) {
             StakeInfo storage stakeInfo = userStakes[msg.sender][i];
             uint256 accrued = calculateInterest(stakeInfo);
@@ -75,34 +62,19 @@ contract FilecoinStakingContractV2 is Initializable, OwnableUpgradeable, Reentra
 
         userStakes[msg.sender].push(newStake);
         emit Staked(msg.sender, amount, block.timestamp);
+        emit Delegated(msg.sender, amount, block.timestamp); 
     }
 
-    function requestUnstake(uint256 amount) external nonReentrant {
-        require(amount > 0, "Cannot request unstake of 0");
-        require(getTotalStaked(msg.sender) >= amount, "Insufficient staked amount");
-        
-        uint256 requestId = unstakeRequests[msg.sender].length;
-        unstakeRequests[msg.sender].push(UnstakeRequest({
-            amount: amount,
-            requestTime: block.timestamp,
-            processed: false
-        }));
+    function unstake(uint256 amount) external nonReentrant {
+        require(amount > 0, "Cannot unstake 0");
+        require(address(this).balance >= amount, "Insufficient fund");
 
-        emit UnstakeRequested(msg.sender, amount, requestId, block.timestamp);
-    }
-
-    function completeUnstake(uint256 requestIndex) external nonReentrant {
-        require(requestIndex < unstakeRequests[msg.sender].length, "Invalid request index");
-        UnstakeRequest storage request = unstakeRequests[msg.sender][requestIndex];
-        require(!request.processed, "Request already processed");
-        require(block.timestamp >= request.requestTime + COOLING_PERIOD, "Cooling period not yet passed");
-
-        uint256 amount = request.amount;
         uint256 totalStaked = 0;
         StakeInfo[] storage stakes = userStakes[msg.sender]; 
         for (uint256 i = 0; i < stakes.length; i++) {
             totalStaked += stakes[i].amount;
         }
+        emit Debug("Total Staked", totalStaked);
 
         require(totalStaked >= amount, "Insufficient staked amount");
 
@@ -114,12 +86,17 @@ contract FilecoinStakingContractV2 is Initializable, OwnableUpgradeable, Reentra
             StakeInfo storage stakeInfo = stakes[i];
             uint256 stakeAmount = stakeInfo.amount;
 
+            emit Debug("Processing Stake Index", i);
+            emit Debug("Current Stake Amount", stakeAmount);
+            emit Debug("Remaining Amount", remainingAmount);
 
             if (stakeAmount > 0) {
                 uint256 accruedInterest = calculateInterest(stakeInfo);
+                emit Debug("Accrued Interest", accruedInterest);
 
                 if (stakeAmount >= remainingAmount) {
                     uint256 interestForUnstaked = accruedInterest * remainingAmount / stakeAmount;
+                    emit Debug("Accrued Interest for Partial/Full Unstake", interestForUnstaked);
 
                     totalInterest += interestForUnstaked;
                     totalPrincipal += remainingAmount;
@@ -145,19 +122,21 @@ contract FilecoinStakingContractV2 is Initializable, OwnableUpgradeable, Reentra
                     stakeInfo.interestAccrued = 0;
                 }
 
+                emit Debug("Total Interest After Processing", totalInterest);
+                emit Debug("Total Principal After Processing", totalPrincipal);
             }
         }
 
         uint256 totalAmount = totalPrincipal + totalInterest;
+        emit Debug("Total Amount to Transfer", totalAmount);
+        emit Debug("Remaining Amount", remainingAmount);
 
         uint256 contractBalance = address(this).balance;
+        emit Debug("Token Balance in Contract", contractBalance);
 
         require(contractBalance >= totalAmount, "Contract does not have enough balance");
         emit Unstaked(msg.sender, totalPrincipal, totalInterest, block.timestamp);
         payable(msg.sender).transfer(totalAmount);
-
-        // Mark the request as processed
-        request.processed = true;
     }
 
     function calculateInterest(StakeInfo memory stakeInfo) internal view returns (uint256) {
@@ -183,14 +162,6 @@ contract FilecoinStakingContractV2 is Initializable, OwnableUpgradeable, Reentra
         return totalInterest;
     }
 
-    function getTotalStaked(address user) public view returns (uint256 totalStaked) {
-        totalStaked = 0;
-
-        for (uint256 i = 0; i < userStakes[user].length; i++) {
-            totalStaked += userStakes[user][i].amount;
-        }
-    }
-
     function getTotalFilecoins(address user) external view returns (uint256 totalAmount) {
         totalAmount = 0;
 
@@ -205,12 +176,7 @@ contract FilecoinStakingContractV2 is Initializable, OwnableUpgradeable, Reentra
         return address(this).balance;
     }
 
-    function setCoolingPeriod(uint256 newCoolingPeriod) external onlyOwner {
-       require(newCoolingPeriod >= 1 minutes, "Cooling period must be at least 1 minute");
-       COOLING_PERIOD = newCoolingPeriod;
-     }
-
-    function getCurrentRate() external view returns (uint256) {
+    function getCurrentRate() external view returns (uint256){
         require(interestRateHistory.length > 0, "No interest rate set");
         return interestRateHistory[interestRateHistory.length - 1].rate;
     }
@@ -222,8 +188,7 @@ contract FilecoinStakingContractV2 is Initializable, OwnableUpgradeable, Reentra
         payable(msg.sender).transfer(amount);
     }
 
+    fallback() external payable nonReentrant{}
 
-    fallback() external payable nonReentrant {}
-
-    receive() external payable nonReentrant {}
+    receive() external payable nonReentrant{}
 }

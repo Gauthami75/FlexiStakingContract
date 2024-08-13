@@ -5,7 +5,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
 
-contract FixedTermFilecoinStaking is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeable {
+contract FixedTermFilecoinStakingP is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeable {
     enum StakePeriod { ONE_DAYS, TWO_DAYS, THREE_DAYS, FOUR_DAYS }
 
     struct StakeInfo {
